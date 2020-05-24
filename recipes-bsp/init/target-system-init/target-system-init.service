@@ -1,0 +1,15 @@
+[Unit]
+Description=Initial setup for target system
+Wants=systemd-udevd.service systemd-udev-trigger.service
+After=systemd-remount-fs.service systemd-udevd.service
+Before=serial-getty@ttySTM0.service netdata.service
+
+[Service]
+Type=oneshot
+ExecStartPre=-/bin/udevadm settle
+ExecStart=-/sbin/target-system-init
+ExecStartPost=/bin/systemctl --no-reload disable target-system-init.service
+WatchdogSec=30
+
+[Install]
+WantedBy=basic.target

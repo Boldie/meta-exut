@@ -1,0 +1,17 @@
+#!/bin/sh
+
+echo "==== Initializing target system ====" > /dev/kmsg
+
+/sbin/resize-helper
+
+# Create new partition with all space left on sd card device
+# and make type LVM
+( echo n; echo; echo; echo; echo t; echo; echo 31; echo w )  | fdisk -W always /dev/mmcblk0
+
+DEVICE=$(fdisk -l /dev/mmcblk0 -o device | tail -n 1)
+
+pvcreate "${DEVICE}"
+vgcreate tank "${DEVICE}"
+lvcreate -l 80%FREE --thinpool tpool tank
+
+echo "==== Initialize of target system finished ====" > /dev/kmsg

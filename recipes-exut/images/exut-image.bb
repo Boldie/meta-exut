@@ -44,3 +44,7 @@ CORE_IMAGE_EXTRA_INSTALL += " \
 CORE_IMAGE_EXTRA_INSTALL += " python3 python3-pip python3-misc python3-twisted python3-jinja2 "
 # LVM2 is used for block based overlaying and snapshot taking.
 CORE_IMAGE_EXTRA_INSTALL += " lvm2 "
+
+IMAGE_INSTALL_remove += " resize-helper "
+
+IMAGE_INSTALL_append = " target-system-init exut-scripts samba "
